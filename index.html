@@ -1,355 +1,635 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lucky Message</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-    body {
-        font-family: 'Poppins', sans-serif;
-        background: linear-gradient(135deg, #e0f2fe, #fce7f3); /* Softer, slightly different pastel shades */
-        margin: 0;
-        padding: 40px;
-        display: flex;
-        justify-content: center;
-        min-height: 100vh;
-        animation: bgGradient 20s ease infinite;
-        background-size: 200% 200%;
-    }
-  
-    @keyframes bgGradient {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-  
-    .container {
-        max-width: 850px;
-        width: 100%;
-        background: rgba(255, 255, 255, 0.95);
-        padding: 35px;
-        border-radius: 20px;
-        box-shadow: 0 12px 35px rgba(0,0,0,0.18);
-        backdrop-filter: blur(12px);
-    }
-  
-    .summary {
-        font-size: 1.5em;
-        margin-bottom: 25px;
-        cursor: pointer;
-        color: #fff;
-        font-weight: 700;
-        background: linear-gradient(45deg, #ec4899, #f43f5e); /* Pink-red gradient for variety */
-        padding: 25px;
-        border-radius: 15px;
-        text-align: center;
-        box-shadow: 0 8px 20px rgba(236, 72, 153, 0.35);
-        transition: all 0.5s ease;
-        position: relative;
-        overflow: hidden;
-    }
-  
-    .summary::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-        transition: left 0.6s ease;
-    }
-  
-    .summary:hover::before {
-        left: 100%;
-    }
-  
-    .summary:hover {
-        transform: translateY(-8px) scale(1.02);
-        background: linear-gradient(45deg, #db2777, #ec4899);
-        box-shadow: 0 15px 35px rgba(236, 72, 153, 0.5);
-    }
-  
-    .summary h4 {
-        margin: 10px 0 0 0;
-        font-size: 0.7em;
-        font-weight: 400;
-        opacity: 0.9;
-        letter-spacing: 1px;
-    }
-  
-    .message-box {
-        display: none;
-        padding: 40px;
-        border-radius: 20px;
-        background: linear-gradient(to bottom right, #fffbeb, #fef3c7); /* Warmer yellow tones */
-        border: 3px solid #f59e0b;
-        margin-top: 20px;
-        line-height: 2;
-        font-size: 1.18em;
-        position: relative;
-        overflow: hidden;
-        animation: fadeIn 1.2s ease;
-    }
-  
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(30px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-  
-    .message-box::before {
-        content: '';
-        position: absolute;
-        top: -60%;
-        left: -60%;
-        width: 220%;
-        height: 220%;
-        background: radial-gradient(circle, rgba(251, 191, 36, 0.15) 0%, transparent 70%);
-        animation: shine 15s linear infinite;
-    }
-  
-    @keyframes shine {
-        0% { transform: translate(0, 0) rotate(0deg); }
-        100% { transform: translate(60%, 60%) rotate(360deg); }
-    }
-  
-    .switch-buttons {
-        text-align: center;
-        margin-bottom: 35px;
-    }
-  
-    button {
-        background: linear-gradient(45deg, #ec4899, #f43f5e); /* Matching pink-red */
-        color: #fff;
-        border: none;
-        padding: 15px 35px;
-        font-size: 1.2em;
-        font-weight: 600;
-        border-radius: 50px;
-        margin: 12px;
-        cursor: pointer;
-        transition: all 0.4s ease;
-        box-shadow: 0 6px 18px rgba(236, 72, 153, 0.3);
-    }
-  
-    button:hover {
-        transform: translateY(-5px) scale(1.05);
-        box-shadow: 0 12px 30px rgba(236, 72, 153, 0.45);
-        background: linear-gradient(45deg, #db2777, #ec4899);
-    }
-  
-    /* Bold colored important text - slightly varied shades */
-    .imp1 { color: #ea580c; font-weight: bold; } /* Brighter orange */
-    .imp2 { color: #b91c1c; font-weight: bold; }
-    .imp3 { color: #1e40af; font-weight: bold; }
-    .imp4 { color: #059669; font-weight: bold; }
-    .imp5 { color: #7c3aed; font-weight: bold; }
-    .imp6 { color: #be123c; font-weight: bold; }
-    .imp7 { color: #991b1b; font-weight: bold; }
-    .imp8 { color: #d97706; font-weight: bold; }
-  
-    .flower {
-        font-size: 1.8em;
-        animation: float 5s ease-in-out infinite;
-        display: inline-block;
-        margin-left: 10px;
-    }
-  
-    @keyframes float {
-        0%, 100% { transform: translateY(0) rotate(0deg); }
-        50% { transform: translateY(-15px) rotate(10deg); }
-    }
-  
-    .dear {
-        font-size: 1.3em;
-        font-weight: 600;
-        color: #ec4899; /* Pink to match theme */
-        margin-bottom: 20px;
-    }
-  
-    .links {
-        text-align: center;
-        margin-top: 40px;
-        padding-top: 20px;
-        border-top: 2px dashed #f59e0b;
-    }
-  
-    .links a {
-        display: inline-block;
-        background: linear-gradient(45deg, #ec4899, #f43f5e);
-        color: #fff;
-        padding: 14px 32px;
-        margin: 12px;
-        border-radius: 50px;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 1.1em;
-        box-shadow: 0 6px 18px rgba(236, 72, 153, 0.3);
-        transition: all 0.45s ease;
-        position: relative;
-        overflow: hidden;
-    }
-  
-    .links a::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-        transition: left 0.6s ease;
-    }
-  
-    .links a:hover::before {
-        left: 100%;
-    }
-  
-    .links a:hover {
-        transform: translateY(-6px) scale(1.08);
-        box-shadow: 0 12px 30px rgba(236, 72, 153, 0.5);
-        background: linear-gradient(45deg, #db2777, #ec4899);
-    }
-  
-    .future-note {
-        margin-top: 30px;
-        padding: 15px;
-        background: rgba(255, 255, 255, 0.7);
-        border-radius: 12px;
-        font-style: italic;
-        color: #7c2d12;
-        text-align: center;
-        border: 1px solid #fecaca;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rj | A Heartfelt Thank You</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0e1a;
+            --text: #e2e8f0;
+            --accent: #00d4aa;
+            --love: #ff4d94;
+            --highlight: #c084fc;
+            --card: #141824;
+            --border: #00ffea;
+            --gradient-primary: linear-gradient(135deg, #c084fc, #00ffea);
+            --gradient-secondary: linear-gradient(135deg, #ff4d94, #c084fc);
+        }
+        [data-theme="light"] {
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --accent: #00b894;
+            --love: #e91e63;
+            --highlight: #9333ea;
+            --card: #ffffff;
+            --border: #9333ea;
+            --gradient-primary: linear-gradient(135deg, #9333ea, #00b894);
+            --gradient-secondary: linear-gradient(135deg, #e91e63, #9333ea);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            overflow-x: hidden; 
+            line-height: 1.8; 
+            transition: background 0.5s, color 0.5s;
+        }
+        
+        #progress-bar { 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 0%; 
+            height: 6px; 
+            background: var(--accent); 
+            z-index: 1000; 
+            transition: width 0.3s ease; 
+            box-shadow: 0 0 15px var(--accent); 
+        }
 
-    /* New Empty Link Styles */
-    .empty-link {
-        animation: pulse 2s infinite;
-    }
+        header { 
+            position: fixed; 
+            width: 100%; 
+            padding: 25px 60px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            z-index: 1000; 
+            transition: all 0.4s ease; 
+        }
+        header.scrolled { 
+            background: rgba(10, 14, 26, 0.92); 
+            backdrop-filter: blur(20px); 
+            padding: 18px 60px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        [data-theme="light"] header.scrolled {
+            background: rgba(248, 250, 252, 0.92);
+        }
+        header h2 { 
+            font-size: 1.8rem; 
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+        .theme-toggle { 
+            background: var(--card); 
+            padding: 14px; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            font-size: 1.6rem; 
+            box-shadow: 0 0 20px rgba(0,255,234,0.25); 
+            transition: all 0.3s;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+        .theme-toggle:hover { transform: scale(1.1); }
 
-    @keyframes pulse {
-        0% { transform: scale(1); box-shadow: 0 6px 18px rgba(236, 72, 153, 0.3); }
-        50% { transform: scale(1.1); box-shadow: 0 12px 30px rgba(236, 72, 153, 0.6); }
-        100% { transform: scale(1); box-shadow: 0 6px 18px rgba(236, 72, 153, 0.3); }
-    }
+        #hero { 
+            height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            position: relative; 
+            text-align: center; 
+            overflow: hidden;
+        }
+        #particles { 
+            position: absolute; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+        }
+        .hero-content { 
+            max-width: 900px; 
+            padding: 0 20px; 
+            z-index: 2;
+        }
+        .hero-content h1 { 
+            font-size: 5.5rem; 
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; 
+            margin-bottom: 25px; 
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .hero-content p { 
+            font-size: 2.4rem; 
+            color: var(--love); 
+            font-weight: 600; 
+        }
+        .highlight-word { 
+            color: var(--love); 
+            font-weight: 700; 
+            font-size: 1.15em; 
+        }
 
-    /* Fade-in animation for new window (though limited in new tab, adds style) */
-    .fade-in {
-        animation: fadeInPage 1.5s ease-in-out;
-    }
+        section { padding: 140px 60px; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .section-title { 
+            font-size: 4rem; 
+            text-align: center; 
+            margin-bottom: 80px; 
+            background: var(--gradient-secondary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; 
+            font-weight: 700;
+        }
 
-    @keyframes fadeInPage {
-        from { opacity: 0; transform: scale(0.95); }
-        to { opacity: 1; transform: scale(1); }
-    }
-</style>
+        .story-section {
+            margin: 50px 0;
+            padding: 45px;
+            background: var(--card);
+            border-radius: 30px;
+            border: 2px solid var(--border);
+            box-shadow: 0 15px 40px rgba(0, 255, 234, 0.15);
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .story-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 4px;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        .story-section:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0, 255, 234, 0.25);
+            border-color: var(--love);
+        }
+        .story-section:hover::before { opacity: 1; }
+        
+        .story-title {
+            font-size: 2.4rem;
+            margin-bottom: 25px;
+            color: var(--accent);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .story-title .emoji {
+            font-size: 1.8rem;
+        }
+        hr {
+            border: none;
+            height: 3px;
+            background: var(--gradient-secondary);
+            margin: 60px 0;
+            border-radius: 50px;
+            opacity: 0.6;
+        }
+        p {
+            font-size: 1.25rem;
+            margin-bottom: 18px;
+            text-align: justify;
+        }
+        strong { color: var(--love); font-weight: 700; }
+        em { color: var(--highlight); font-style: italic; }
+        ul { 
+            margin: 30px 0; 
+            padding-left: 50px; 
+        }
+        li { 
+            margin-bottom: 16px; 
+            font-size: 1.25rem; 
+        }
+        li::marker { color: var(--accent); }
+
+        .lang-toggle {
+            text-align: center;
+            margin: 40px 0 60px 0;
+        }
+        .lang-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            margin: 0 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.4s;
+        }
+        .lang-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        .lang-btn.active {
+            background: var(--love);
+            box-shadow: 0 0 30px rgba(255,77,148,0.5);
+        }
+
+        .hidden { display: none; }
+
+        .typing {
+            overflow: hidden;
+            border-right: 3px solid var(--love);
+            white-space: nowrap;
+            animation: typing 4s steps(60, end) forwards, blink-caret 0.75s step-end infinite;
+            display: inline-block;
+            width: 0;
+        }
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--love); }
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 20px 30px; }
+            .hero-content h1 { font-size: 3.8rem; }
+            .hero-content p { font-size: 1.8rem; }
+            .section-title { font-size: 3rem; }
+            section { padding: 100px 30px; }
+            .story-section { padding: 35px; }
+            .story-title { font-size: 2rem; }
+            .lang-btn { padding: 14px 30px; font-size: 1.1rem; margin: 10px; }
+            .theme-toggle { bottom: 20px; right: 20px; }
+        }
+    </style>
 </head>
-<body>
-<div class="container">
-    <div class="summary" onclick="toggleMessage()">
-        ✨ Click here to reveal your special message ✨
-        <h4>— A small summary from my side —</h4>
+<body data-theme="dark">
+    <div id="progress-bar"></div>
+    
+    <header>
+        <h2>rj</h2>
+        <div class="theme-toggle" onclick="toggleTheme()">🌙</div>
+    </header>
+    
+    <section id="hero">
+        <canvas id="particles"></canvas>
+        <div class="hero-content" data-aos="zoom-in">
+            <h1>A Heartfelt Thank You </h1>
+            <p>To My <span class="highlight-word">Unknown Lucky Girl</span></p>
+        </div>
+    </section>
+    
+    <section id="story">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">My Complete Story For You</h2>
+
+            <div class="lang-toggle">
+                <button class="lang-btn" id="hindi-btn" onclick="showHindi()">हिंदी/हिंग्लिश</button>
+                <button class="lang-btn active" id="english-btn" onclick="showEnglish()">English</button>
+            </div>
+
+            <!-- ENGLISH VERSION (Default) -->
+            <div id="english" class="message-content">
+                <div class="story-section" data-aos="fade-up" data-aos-delay="100">
+                    <h3 class="story-title"><span class="emoji">🗣️</span> Starting Note</h3>
+                    <p>Look buddy,</p>
+                    <p>I never lie (or very rarely), but here I’m not lying.</p>
+                    <p>Look yaar, I don’t know if this word comes again and again, so please don’t get irritated — it’s just my habit to say this.</p>
+                    <p>“Jii… look yaar…”</p>
+                    <p>If you think I’m saying this to look cool in front of you, that’s not true.</p>
+                    <p>To prove, I have attached my client’s chat history below (not friend, because I am a boy — we usually talk with more slang in friends’ chats 😅).</p>
+                </div>
+
+                <div class="story-section" data-aos="fade-up" data-aos-delay="200">
+                    <h3 class="story-title"><span class="emoji">❤️</span> Heartfelt Thank You</h3>
+                    <p>So now I just need one last help from you.</p>
+                    <p>But before that, I want to say thank you — yaar, thanks from my heart for your helping.</p>
+                    <p>Look, I don’t talk to anyone quickly, and I don’t trust easily.</p>
+                    <p>So please, don’t tell this to your best friend or close friends.</p>
+                </div>
+
+                <div class="story-section" data-aos="fade-up" data-aos-delay="300">
+                    <h3 class="story-title"><span class="emoji">🗓️</span> Starting Story</h3>
+                    <p>Look yaar, I had never seen you before 2 August.</p>
+                    <p>I talked to you for the first time on 18 October.</p>
+                    <p>After that, my last 6 months of distraction ended.</p>
+                    <p>(I only asked you — “yes or no.”)</p>
+                    <p>(If you want, I can mention all links in one page.)</p>
+                    <p>After talking to you and you talked so nicely, thanks for that too.</p>
+                    <p>Since then, my life is just happiness, happiness, happiness.</p>
+                    <p>(I will mention all how and why.)</p>
+                </div>
+
+                <div class="story-section" data-aos="fade-up" data-aos-delay="400">
+                    <h3 class="story-title"><span class="emoji">📍</span> Distraction & Turning Point</h3>
+                    <p>Before, I had planned to go to Delhi or Patna.</p>
+                    <p>On 16 August, I went to Patna, saw rooms and coaching.</p>
+                    <p>But after talking to you, my distraction ended in just 6 days.</p>
+                    <p>At that time, I wrote this line — I thought I would say it face to face,</p>
+                    <p>but I don’t know why, when I came to talk to you, my heartbeat went very high.</p>
+                    <p>I wanted to say something else, but something else came out.</p>
+                    <p class="typing highlight-word">The line was:<br>“Thanks for your helping.<br>After talking to you for 6 minutes, my 7-month distraction,<br>5 days of coding, and 4 seconds later… everything deleted.”</p>
+                </div>
+
+                <div class="story-section" data-aos="fade-up" data-aos-delay="500">
+                    <h3 class="story-title"><span class="emoji">👀</span> About Following</h3>
+                    <p>Look yaar, I have never followed you.</p>
+                    <p>(I already mentioned — I don’t lie.)</p>
+                    <p>Since talking to you, I only checked once when I needed help — that day 18 Oct.</p>
+                    <p>Then once more (I don’t exactly remember).</p>
+                    <p>Total only 5 times, I went when you were out purposely.</p>
+                    <p>Out of them: 2 times in the past, once 19 Dec, 3 times, and today once.</p>
+                    <p>I also told you before — I don’t follow you.</p>
+                    <p>Whatever happened besides that was accidental.</p>
+                    <p>So I have never followed you.</p>
+                    <p>All dates and counts I have already mentioned.</p>
+                    <p>Don’t worry — I have made my master plan for 2026.</p>
+                    <p>If I ever disturbed you, I’m sorry.</p>
+                </div>
+
+                <div class="story-section" data-aos="fade-up" data-aos-delay="600">
+                    <h3 class="story-title"><span class="emoji">🍀</span> You Are Just an Unknown Lucky Girl (For Me)</h3>
+                    <p class="typing"><strong>You are really an unknown lucky girl for me (I NEVER LIE).</strong></p>
+                    <p><strong>Why you are lucky for me:</strong></p>
+                    <ul>
+                        <li>My <strong>7-month distraction ended in 7 days</strong>.</li>
+                        <li>I was really irritated (not for her), I was overthinking a lot.</li>
+                        <li>Now I have <strong>started earning money</strong>.</li>
+                        <li>Life that I was overthinking about is now <strong>going very well</strong>.</li>
+                    </ul>
+                    <p>Then I thought I should thank you in detail.</p>
+                    <p>I have a pre-plan for 2026 — so if in 2026 I go to Patna or anywhere, don’t overthink that I didn’t thank you before.</p>
+                    <p>(Really, for last 1 month I wanted to thank you, but I couldn’t.)</p>
+                    <p><strong>Reason:</strong></p>
+                    <ul>
+                        <li>When you went out, my brothers were around, so I couldn’t say.</li>
+                        <li>And girls were also around inside, so I couldn’t say.</li>
+                        <li>Every time when you went out, I couldn’t write either — didn’t want to disturb you or seem like I’m following.</li>
+                        <li>Even when you were with friends, I couldn’t say (I know the reason).</li>
+                    </ul>
+                    <p>That’s why Saturday was my best day — planned to say.</p>
+                    <p>But one day you didn’t come, and one day I didn’t.</p>
+                    <p>If I didn’t say today, I would have said on <strong>27 Dec 2025</strong>, but that day is my exam.</p>
+                    <p>If you didn’t come that day, then I would have had to talk in 2026, which I didn’t want — overthinking would start again.</p>
+                </div>
+
+                <div class="story-section" data-aos="fade-up" data-aos-delay="700">
+                    <h3 class="story-title"><span class="emoji">🔠</span> About Your Name</h3>
+                    <p>What can I say yaar —</p>
+                    <p>If I found out your name and it didn’t match my favorite letter, I would have overthought again.</p>
+                    <p>I told before — if we overthink about someone, we even see them in our dreams.</p>
+                    <p>I thought your name starts with S, because all female friends I had in the past had S names.</p>
+                    <p>But I feel your name doesn’t start with S.</p>
+                    <p>Because in dream I forgot to ask your name, next day when I was thinking I realized it starts with M.</p>
+                    <p>If I knew your name started with M, I wouldn’t take your help.</p>
+                    <p>But then I realized — if your name starts with M, you would not have helped me, reason I know.</p>
+                    <p>So don’t worry — you are <strong>just an unknown lucky girl for me, nothing more</strong>.</p>
+                    <p>I stay busy in my own world and always think positively.</p>
+                    <p>Please don’t misunderstand my intentions.</p>
+                </div>
+
+                <div class="story-section" data-aos="fade-up" data-aos-delay="800">
+                    <h3 class="story-title"><span class="emoji">📚</span> Study & Help</h3>
+                    <p>One point left —</p>
+                    <p>After seeing you, I also started studying at 7 PM, so thanks because I needed your help — nothing more.</p>
+                    <p>I don’t talk to anyone at home without reason, so thanks again.</p>
+                </div>
+
+                <div class="story-section" data-aos="fade-up" data-aos-delay="900">
+                    <h3 class="story-title"><span class="emoji">🧠</span> Experiment & Luck</h3>
+                    <p>I’m telling you all this because I’m doing an experiment on myself — to check if you really are a lucky girl for me.</p>
+                    <p>I have some ideas I never told my friends, and I’m only telling you — reason, I’m checking myself.</p>
+                    <h3 class="story-title" style="font-size:1.8rem; margin-top:30px;"><span class="emoji">⚙️</span> Example of Experiment</h3>
+                    <p>Whenever I make a plan and it goes really well, if I share it with friends happily, the next day, things go down.</p>
+                    <p>Example: I had a YouTube channel. At first, views were 1.5k–3.5k, then 10k, then 27k.</p>
+                    <p>I told my friend — next day 800, next day 456, then I stopped it.</p>
+                    <p>I’m not blaming you — I just want to check if staying silent keeps success safe.</p>
+                </div>
+
+                <div class="story-section" data-aos="fade-up" data-aos-delay="1000">
+                    <h3 class="story-title"><span class="emoji">💫</span> Final Part: My Last Thank You</h3>
+                    <p><strong>You are really an unknown lucky girl for me.</strong></p>
+                    <p>I never lie, this is all truth.</p>
+                    <p>Now what I need from you:</p>
+                    <p>Look yaar,</p>
+                    <p>I can do this work myself.</p>
+                    <p>See, I’m so smart that for last 4 years, I haven’t watched a single YouTube ad.</p>
+                    <p>Any premium app, I have a mod version.</p>
+                    <p>I always have some solution for everything.</p>
+                    <p>I work day and night with AI, so I can do everything myself —</p>
+                    <p>but I just wanted to thank you one last time, and talk to you once.</p>
+                    <p class="typing">I will do that on <strong>27-12-2025</strong> — that will be my last date.</p>
+                    <p>After that, I will never disturb you.</p>
+                    <p><strong>It’s my promise to you.</strong></p>
+                    <p>Just reply on 27-12, I will mention time and date — only 27th.</p>
+                    <p>I could have taken this help myself, or even from Rohit bhaiya, but I couldn’t — reason I told you before.</p>
+                </div>
+
+                <div class="story-section" style="text-align:center; background: linear-gradient(135deg, #ff4d94, #c084fc); color:white; border:none;" data-aos="fade-up" data-aos-delay="1100">
+                    <h3 style="color:white; font-size:2.2rem;">One final talk only on 27-12-2025.<br>After that, I will never disturb you.<br>This is my promise! 🙏❤️</h3>
+                </div>
+            </div>
+
+            <!-- HINGLISH VERSION -->
+<div id="hindi" class="message-content hidden">
+    <div class="story-section" data-aos="fade-up" data-aos-delay="100">
+        <h3 class="story-title"><span class="emoji">🗣️</span> Starting Note</h3>
+        <p>Dear…..</p>
+        <p>Mai kabhi jhoot nahi bolta (bolte hai jada nahi), but isme kuch jhoot nahi hoga.</p>
+        <p>I don’t know ki aager ye word baar-baar aaye to please irritated mat hona — kyunki ye meri aadat hai ye word bolne ki.</p>
+        <p>Jii… …</p>
+        <p>Agar tumhe lage ki mai aapke samne cool banne ke liye bol raha hu, to aisa kuch nahi.</p>
+        <p>Proof ke liye maine neeche apne client ka chat history laga diya (not friend, because I am a boy, so dost ko to nahi laga sakta — kyunki hamari baaton me jyada gaaliyan hoti hain).</p>
     </div>
-  
-    <div class="message-box" id="fullMessage">
-        <!-- Language Switch Buttons -->
-        <div class="switch-buttons">
-            <button onclick="showEnglish()">English</button>
-            <button onclick="showHinglish()">Hinglish</button>
-        </div>
-        <!-- English Version -->
-        <div id="englishMessage">
-            <div class="dear">Dear...</div>
-          
-            <span class="imp3">I don’t follow you,</span><br>
-            and I never will — <span class="imp4">everything happened indirectly.</span><br><br>
-            You are just an <span class="imp5">unknown girl</span> for me,<br>
-            who <span class="imp1">helped me 3 times in the past,</span><br>
-            and once more on <span class="imp1">20th December.</span><br><br>
-            I don’t have any <span class="imp2">wrong thoughts</span> about you.<br>
-            I’m telling you all this so that <span class="imp6">you don’t misunderstand me,</span><br>
-            and nothing else.<br><br>
-            You can check the rest in the detail section,<br>
-            and yes, I used AI for it,<br>
-            so if any word is missed or wrongly written,<br>
-            <span class="imp7">I apologize for that.</span><br><br>
-            The work-related thing,<br>
-            <span class="imp8">I will upload tomorrow.</span><br><br>
-<samp>i use ai to arrange so aager koi v galti ho ya koi galt word use leye sorry <p></p> </samp>
-            <span class="imp1">Thank you so much. Bye.</span> <span class="flower">🌼</span>
-          
-            <div class="links">
-                <strong>Personal Detail:</strong><br>
-                <a href="https://75raj.github.io/personal/" target="_blank">📖 Open Personal Detail Section</a><br><br>
-              
-                <strong>Work Detail:</strong><br>
-                <a href="https://75raj.github.io/work/" target="_blank">💼 Open Work Related Detail</a><br><br>
 
-                <strong>Empty Page:</strong><br>
-                <a href="https://75rishi.github.io/Empty/" target="_blank" class="empty-link">🌑 Open Empty Page (Special Animation)</a>
-            </div>
-          
-            <!-- Future Note added only in English -->
-            <div class="future-note">
-                <strong>Note for the future:</strong><br>
-                This will be my last interaction after 27th December 2025.<br>
-                I promise I won't disturb you anymore after that date.<br>
-                Thank you once again for everything. 🌸
-            </div>
-        </div>
-      
-        <!-- Hinglish Version -->
-        <div id="hinglishMessage" style="display:none;">
-            <div class="dear">Dear...</div>
-          
-            <span class="imp3">Main aapko follow nahi karta hoon,</span><br>
-            aur na hi kabhi karunga — <span class="imp4">sab kuch indirectly hi hua hai.</span><br><br>
-            Aap mere liye bas ek <span class="imp5">unknown girl</span> hain,<br>
-            jisne mujhe <span class="imp1">past me 3 baar help kiya tha,</span><br>
-            aur ek baar last time <span class="imp1">20 December ko.</span><br><br>
-            Mere mann mein aapke liye koi <span class="imp2">galat soch</span> nahi hai.<br>
-            Ye sab isliye bata raha hoon taaki <span class="imp6">aap mujhe galat na samjhein,</span><br>
-            aur kuch nahi.<br><br>
-            Baaki aap detail section me dekh sakti hain,<br>
-            aur haan, maine usme AI ka use kiya hai,<br>
-            to agar koi word miss ya galat likha ho gaya ho,<br>
-            <span class="imp7">to uske liye sorry.</span><br><br>
-            Jo mere kaam se related baat hai,<br>
-            <span class="imp8">wo main kal upload kar dunga.</span><br><br>
-            <span class="imp1">Thank you so much. Bye.</span> <span class="flower">🌼</span>
-          
-            <div class="links">
-                <strong>Personal Detail:</strong><br>
-                <a href="https://75raj.github.io/personal/" target="_blank">📖 Personal Detail Section Kholen</a><br><br>
-              
-                <strong>Work Detail:</strong><br>
-                <a href="https://75raj.github.io/work/" target="_blank">💼 Work Related Detail Kholen</a><br><br>
+    <div class="story-section" data-aos="fade-up" data-aos-delay="200">
+        <h3 class="story-title"><span class="emoji">❤️</span> Heartfelt Thank You</h3>
+        <p>So now mujhe aapse bas ek last help chahiye.</p>
+        <p>Usse pehle mai aapko thank bolna chahta hu — dil se thanks for your helping.</p>
+        <p>Mai jaldi kisi se baat nahi karta, na hi trust karta.</p>
+        <p>To please, meri ye baat apne best se best friend or close friends ko mat batana.</p>
+    </div>
 
-                <strong>Empty Page:</strong><br>
-                <a href="https://75rishi.github.io/Empty/" target="_blank" class="empty-link">🌑 Empty Page Kholen (Special Animation)</a>
-            </div>
-        </div>
+    <div class="story-section" data-aos="fade-up" data-aos-delay="300">
+        <h3 class="story-title"><span class="emoji">🗓️</span> Starting Story</h3>
+        <p>Maine aapko 2 August se pehle kabhi nahi dekha tha.</p>
+        <p>Maine aapse 18 October ko pehli baar baat ki thi.</p>
+        <p>Uske baad se mera last 6 month ka distraction khatam ho gaya.</p>
+        <p>(Maine usse bhi bas pucha tha — “ha ya na.”)</p>
+        <p>(If you want to see then I will mention all links in one page bookmark.)</p>
+        <p>Jab se aapse baat ki aapne itne aache se baat kya hala use lehye v thanks.</p>
+        <p>Tab se life bas happiness hi happiness hai. (I will mention all how and why)</p>
+    </div>
+
+    <div class="story-section" data-aos="fade-up" data-aos-delay="400">
+        <h3 class="story-title"><span class="emoji">📍</span> Distraction & Turning Point</h3>
+        <p>Pehle maine plan kar liya tha ki mujhe Delhi ya Patna jana hai.</p>
+        <p>16 August ko Patna gaye, room aur coaching dekhe.</p>
+        <p>But jab aapse baat hui, mera distraction sirf 6 din me khatam ho gaya.</p>
+        <p>Us time maine ye line likha tha — socha tha aapse samne (face to face) boluga,</p>
+        <p>but pata nahi kyu jise hi aapke samne aapse baat karne jaya mere heartbeat high ho gaya.</p>
+        <p>Bolna kuch aur chate the aur nikal kuch aur raha tha.</p>
+        <p>Wo line thi:<br>“Thanks for your helping.<br>Aapse mere 7 month ka distraction, aapse 6 min baat karne ke baad,<br>5 din code karne ke baad, 4 second me code delete kar diye.”</p>
+    </div>
+
+    <div class="story-section" data-aos="fade-up" data-aos-delay="500">
+        <h3 class="story-title"><span class="emoji">👀</span> About Following</h3>
+        <p>Ab, maine aapko aaj tak kabhi follow nahi kiya.</p>
+        <p>(Maine pehle hi mention kar diya tha — mai jhoot nahi bolta.)</p>
+        <p>Bas jab se aapse baat ki hai, tab se sirf ek baar jab mujhe aapse kaam tha tab dekha — wo din 18 Oct tha.</p>
+        <p>Phir ek aur baar (jo yaad nahi hai).</p>
+        <p>Total only 5 baar maine jaan-bujhkar jab aap bahar gaye tab nikla hu bas.</p>
+        <p>Usme se 2 baar past me phir 19 Dec ko 3 baar, aur aaj ek baar.</p>
+        <p>Baki maine aapko aak aur bar v bola tha ki — mai aapko follow nahi kar raha hu, baki sab incidentally hua hai. (incidentally ka matlab maine janbuj ke kabhi nahi gaye hai)</p>
+        <p>Isliye mai aapko kabhi follow nahi kiya — jo kiya tha wo sab date aur count maine mention kar diya.</p>
+        <p>Don’t worry, maine apna master plan bana liya hai 2026 ka.</p>
+        <p>Agar meri wajah se aapko kahin bhi disturb hua ho, to sorry.</p>
+    </div>
+
+    <div class="story-section" data-aos="fade-up" data-aos-delay="600">
+        <h3 class="story-title"><span class="emoji">🍀</span> You Are a Just Unknown Lucky Girl (For Me)</h3>
+        <p>You are really an unknown lucky girl for me (I NEVER LIE).</p>
+        <p><strong>Why you are lucky girl for me:</strong></p>
+        <ul>
+            <li>Mere 7 month ka distraction 7 din me khatam.</li>
+            <li>I was really irritated (not for her), bohot overthinking karta tha.</li>
+            <li>Ab mai start earn money kar raha hu.</li>
+            <li>Life jise hum overthink kar rahe the, sab kuch best chal raha hai.</li>
+        </ul>
+        <p>Phir socha ki aapko all detail thanks bolu.</p>
+        <p>To mere aak pre-plan hai 2026 ka ya to 2026 me Gaya ya Patna chale gaye to overthink na kare ki “last time thanks bhi nahi bol paya aapko jis ne hame itna help kya.”</p>
+        <p>(Really mai last 1 month se soch raha tha ki aapko thanks bolna, but bol nahi pa raha tha.)</p>
+        <p><strong>Reason:</strong></p>
+        <ul>
+            <li>Jab aap bahar jao use time bhaiya log bahar the tab bol nahi sakte the.</li>
+            <li>Aur ander me v girl log thi to v nahi bol sakte the.</li>
+            <li>Baar-baar jab aap bahar jawo to mai v nahi likal sakta tha — aapko disturb na kar du ya aapko lage mai follow kar raha hu.</li>
+            <li>Jab aap dost ke sath hoti thi tab bhi nahi bol sakta (reason I know).</li>
+        </ul>
+        <p>Isliye mera best day Saturday tha — plan tha ki bol dunga.</p>
+        <p>But ek din aap nahi aayi, ek din mai nahi.</p>
+        <p>Agar aaj nahi bolta to 27 Dec 2025 ko bolta, but us din mera exam hai.</p>
+        <p>Agar us din aap nahi aati to mujhe 2026 se baat karni padti, jo mai nahi chahta tha — fir se overthinking ho jati.</p>
+    </div>
+
+    <div class="story-section" data-aos="fade-up" data-aos-delay="700">
+        <h3 class="story-title"><span class="emoji">🔠</span> About Your Name</h3>
+        <p>Kya batau — agar mujhe aapka name pata chalta aur wo mere favourite letter se match nahi hota, to ek aur overthinking shuru ho jati.</p>
+        <p>Maine pehle bataya tha na, jyada overthink karne se kisi ke baare me sochne par hum uska sapna (dream) me dekhte hain.</p>
+        <p>Mujhe laga tha ki aapka name S se hoga — kyunki mere past me jitni bhi female friends thi sabka name S se tha.</p>
+        <p>But mujhe lagta hai aapka name S se nahi hai. Because dream me to name puchna hi bhul gaya tha then next day jab me bed par isi kuch soch rahe then I know your name but not confirm Starting name is M.</p>
+        <p>(AAGER MUJE PATA CHALTA ki aapka name M se start hota hai to mai app kabhi help nahi leta But then I realized ki aapka name M se start hota to aap mere help nahi karte reason I know why.)</p>
+        <p>So don’t worry — aap mere liye just unknown lucky girl ho, nothing more.</p>
+        <p>Mai apni duniya me busy rehta hu, aur hamesha positive sochta hu.</p>
+        <p>Bas aap mere intention galat mat samajhna please.</p>
+    </div>
+
+    <div class="story-section" data-aos="fade-up" data-aos-delay="800">
+        <h3 class="story-title"><span class="emoji">📚</span> Study & Help</h3>
+        <p>Ek point chhut gaya tha —</p>
+        <p>Aapko dekhe ke baad maine bhi 7 baje study karne laga tha iseleye v thanks.</p>
+        <p>Kyunki mujhe aapse help chahiye thi, bas nothing more.</p>
+        <p>Bina kaam ke mai apne ghar me bhi kisi se baat na karu, to uske liye bhi thanks.</p>
+    </div>
+
+    <div class="story-section" data-aos="fade-up" data-aos-delay="900">
+        <h3 class="story-title"><span class="emoji">🧠</span> Experiment & Luck</h3>
+        <p>Aapko ye sab isliye bata raha hu kyunki mai khud pe experiment kar raha hu — ki kya aap sach me lucky girl ho mere liye.</p>
+        <p>Mere paas kuch ideas hain jo maine apne dost ko bhi nahi bataye, wo bas aapko hi bata raha hu — reason, mai check kar raha hu khud ko.</p>
+
+        <h3 class="story-title" style="font-size:1.8rem; margin-top:30px;"><span class="emoji">⚙️</span> Example of Experiment</h3>
+        <p>Jab bhi mai koi plan karta hu aur wo best chal raha hota hai, aur jyada khushi me aake apne dost ko bata deta hu, next day se downfall start.</p>
+        <p>For example — Mera ek YouTube channel tha, starting me 1.5k–3.5k, matlab 10k tak ja raha tha. Uske baad 27k tak jane laga tha, phir maine apne dost ko bata diya — next day 800, next day 456, fir maine khud chod diya.</p>
+        <p>But mai aapko blame nahi karu because mai he kam kab start karu ga ye bass muje pata hai aur kise ko batye ge v nahi — bas check kar raha hu ki silence me rehne se success chalti hai kya.</p>
+    </div>
+
+    <div class="story-section" data-aos="fade-up" data-aos-delay="1000">
+        <h3 class="story-title"><span class="emoji">💫</span> Final Part: My Last Thank You</h3>
+        <p>You are really an unknown lucky girl for me.</p>
+        <p>I never lie and ise ise sab kuch truth hai now mje aapse se jo kam hai wo ye hai ki, mai kaam khud se bhi kar sakta hu.</p>
+        <p>Dekha, mai aapse keh raha hu — mai itna smart hu ki last 4 years se maine YouTube ka ek bhi ad nahi dekha.</p>
+        <p>Koi bhi premium app ho, uska mere paas mod version hota hai.</p>
+        <p>Mere paas har cheez ka kuch na kuch solution hota hi hai.</p>
+        <p>Mai din raat AI se hi kaam karta hu, to mai sab kuch khud hi kar sakta hu — but mujhe bas aapse ek last time thank kehna tha, aur ek baar aapse baat karni thi.</p>
+        <p>Wo mai 27-12-2025 ko karunga — wo meri last date rahegi.</p>
+        <p>Uske baad mai kabhi aapko disturb nahi karunga.</p>
+        <p><strong>It’s my promise to you.</strong></p>
+        <p>Bas aap 27-12 ka reply kar dena, mai time aur date sab mention kar dunga — sirf 27 ko hi.</p>
+        <p>Mai ye help khud se bhi le sakta tha, aur Rohit bhaiya se bhi, but nahi le sakta — reason maine aapko pehle hi bata diya hai.</p>
+    </div>
+
+    <div class="story-section" style="text-align:center; background: linear-gradient(135deg, #ff4d94, #c084fc); color:white; border:none;" data-aos="fade-up" data-aos-delay="1100">
+        <h3 style="color:white; font-size:2.2rem;">27-12-2025 ko sirf ek aakhiri baar baat.<br>Uske baad kabhi disturb nahi karunga.<br>Ye mera wada hai! 🙏❤️</h3>
     </div>
 </div>
-<script>
-function toggleMessage() {
-    const box = document.getElementById('fullMessage');
-    if (box.style.display === 'block') {
-        box.style.display = 'none';
-    } else {
-        box.style.display = 'block';
+
+                <div class="story-section" style="text-align:center; background: linear-gradient(135deg, #ff4d94, #c084fc); color:white; border:none;" data-aos="fade-up" data-aos-delay="1100">
+                    <h3 style="color:white; font-size:2.2rem;">27-12-2025 को सिर्फ एक आखिरी बार बात।<br>उसके बाद कभी disturb नहीं करूंगा।<br>ये मेरा वादा है! 🙏❤️</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        AOS.init({ duration: 1200, once: false });
+
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', newTheme);
+            document.querySelector('.theme-toggle').textContent = newTheme === 'dark' ? '🌙' : '☀️';
+        }
+
+        function showHindi() {
+            document.getElementById('hindi').classList.remove('hidden');
+            document.getElementById('english').classList.add('hidden');
+            document.getElementById('hindi-btn').classList.add('active');
+            document.getElementById('english-btn').classList.remove('active');
+        }
+
+        function showEnglish() {
+            document.getElementById('english').classList.remove('hidden');
+            document.getElementById('hindi').classList.add('hidden');
+            document.getElementById('english-btn').classList.add('active');
+            document.getElementById('hindi-btn').classList.remove('active');
+        }
+
         showEnglish();
-    }
-}
-function showEnglish() {
-    document.getElementById('englishMessage').style.display = 'block';
-    document.getElementById('hinglishMessage').style.display = 'none';
-}
-function showHinglish() {
-    document.getElementById('englishMessage').style.display = 'none';
-    document.getElementById('hinglishMessage').style.display = 'block';
-}
-</script>
+
+        particlesJS('particles', {
+            particles: { 
+                number: { value: 120, density: { enable: true, value_area: 800 } }, 
+                color: { value: ['#00ffea', '#ff4d94', '#c084fc'] }, 
+                shape: { type: 'circle' }, 
+                opacity: { value: 0.7, random: true }, 
+                size: { value: 4, random: true }, 
+                line_linked: { enable: true, distance: 150, color: '#c084fc', opacity: 0.4, width: 1 }, 
+                move: { enable: true, speed: 3, direction: 'none', random: false, straight: false } 
+            },
+            interactivity: { 
+                detect_on: 'canvas',
+                events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' } },
+                modes: { repulse: { distance: 100, duration: 0.4 } }
+            },
+            retina_detect: true
+        });
+
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progress-bar').style.width = scrolled + '%';
+            
+            document.querySelector('header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+    </script>
 </body>
 </html>
+
